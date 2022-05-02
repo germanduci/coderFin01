@@ -3,30 +3,63 @@
 ///Variables de precio:
 const large         = 1.45;
 const extraLarge    = 1.75;
-const precioRegular = 69;
+let precioFinal     =0;
 
-///Arrays de ingredientes, se puede agregar o quitar segun necesario.
-const carnes        =["Carne","Cerdo","Veggie"];
-const verdes        =["Tomate","Lechuga","Pepino","Cebolla"];
-const quesos        =["Cheddar","Cabra","Provolone","Azul"];
-const extras        =["Bacon","Jamon","Huevo","Salsa Heroica"];
-const pan           =["Tradicional","Celiaco"];
-const size          =["Regular","Large","Extra Large"];
+///Tamaño producto - Se utiliza para calcular el precio final.
+const size=["Regular","Large","Extra Large"];
 
 ///Array contenedor de hamburguesas creadas, "simiar a un carrito"
 const hamburguesas=[];
 
-///CONSTRUCTOR DE CLASE BURGER///
+///CONSTRUCTOR DE CLASES///
+class ingrediente{
+    constructor(nombre,precio){
+        this.nombre = nombre;
+        this.precio = precio;
+    }
+}
+
+///Construcción objetos ingredientes.
+const tomate = new ingrediente("Tomate",10);
+const lechuga = new ingrediente("Lechuga",5);
+const pepino = new ingrediente("Pepino",8);
+const cebolla = new ingrediente("Cebolla",3);
+
+const panTradicional = new ingrediente("Tradicional",5);
+const panCeliaco = new ingrediente("Celiaco",10);
+
+const carne = new ingrediente("Carne",20);
+const cerdo = new ingrediente("Cerdo",15);
+const veggie = new ingrediente("Veggie",18);
+
+const cheddar = new ingrediente("Cheddar",8);
+const cabra = new ingrediente("Cabra",7);
+const provolone = new ingrediente("Provolone",10);
+const azul = new ingrediente("Azul",7);
+
+const bacon = new ingrediente("Bacon",10);
+const jamon = new ingrediente("Jamon",8);
+const huevo = new ingrediente("Huevo",5);
+const salsaHeroica = new ingrediente("Salsa Heroica",12);
+
+
+///Arrays contenedores ingredientes
+const ingredientesVerdes=[tomate,lechuga,pepino,cebolla];
+const ingredientesCarnes=[carne,cerdo,veggie];
+const ingredientesQuesos=[cheddar,cabra,provolone,azul];
+const ingredientesExtras=[bacon,jamon,huevo,salsaHeroica];
+const ingredientesPanes=[panTradicional,panCeliaco];
+
 class Burger{
-    constructor(ingredienteCarne,ingredientePan,ingredienteVerde,ingredienteQueso,ingredienteExtra,tamano,precioFin,numeroOrder){
+    constructor(ingredienteCarne,ingredientePan,ingredienteVerde,ingredienteQueso,ingredienteExtra,tamanio,precioFinal,numOrder){
         this.ingredienteCarne   = ingredienteCarne;
         this.ingredientePan     = ingredientePan;
         this.ingredienteVerde   = ingredienteVerde;
         this.ingredienteQueso   = ingredienteQueso;
         this.ingredienteExtra   = ingredienteExtra;
-        this.tamano             = tamano;
-        this.precioFin          = precioFin;
-        this.numerorder         = numeroOrder;
+        this.tamanio            = tamanio;
+        this.precioFinal        = precioFinal;
+        this.numOrder           = numOrder;
     }
 }
 
@@ -71,147 +104,232 @@ function moreBurger(){
             opcion = parseInt(prompt("Creamos otra Hero Burger?: 1. Si! - 2. Salir"));
     }
 }
-
-//Creamos su hamburgesa, llamando funciones para ingredientes y mostrando un resumen de orden.
-function crearBurger(){
-    ingredienteCarne    = agregarCarne();
+//Creamos su hamburgesa, llamando funciones para ingredientes y mostrando un resumen de orden por alerta.
+function crearBurger(){    
     ingredientePan      = agregarPan();
-    ingredienteVerde    = agregarVerduras();
+    ingredienteCarne    = agregarCarne();
+    ingredienteVerde    = agregarVerdura();
     ingredienteQueso    = agregarQueso();
-    ingredienteExtra    = agregarExtra();
-    precioBase          = precioRegular;
+    ingredienteExtra    = agregarExtra();    
     tamanio             = setSize();
-    precioFinal         = setPrecio(precioBase,tamanio);
-    let numOrder        = Math.ceil(Math.random()*100);    
+    precioFinal         = setPrecio(tamanio);
+    numOrder            = Math.ceil(Math.random()*100);
 
-    alert("Su Burger Hero ha sido creada!\nEsta compuesta por una hamburguesa de "+ingredienteCarne+".\nSu pan es: "+ingredientePan+".\nSus ingredientes son:\nVerde: "+ingredienteVerde+".\nQueso: "+ingredienteQueso+".\nExtra: "+ingredienteExtra+".\nEl tamaño elegido es: "+
-    tamanio+"\nEl precio Final es de: $"+precioFinal+".\nTu número de orden es: "+numOrder+".\nSi lo deseas puedes ver en la consola todas las Hero burguers que has armado!"); 
+    alert("Su Burger Hero ha sido creada!\nSu pan es: "+ingredientePan+".\nEsta compuesta por un medallón: "+ingredienteCarne+".\nSus ingredientes son:\nVerde: "+ingredienteVerde+".\nQueso: "+ingredienteQueso+".\nExtra: "+ingredienteExtra+".\nEl tamaño elegido es: "+
+    tamanio+"\nEl precio Final es de: $"+precioFinal+".\nTu número de orden es: "+numOrder+".\nAl finalizar puedes ver en la consola todas las Hero burguers que has armado!"); 
     
-    hamburguesas.push(new Burger(ingredienteCarne,ingredientePan,ingredienteVerde,ingredienteQueso,ingredienteExtra,tamanio,precioFinal,numOrder));
+    hamburguesas.push(new Burger(ingredientePan,ingredienteCarne,ingredienteVerde,ingredienteQueso,ingredienteExtra,tamanio,precioFinal,numOrder));
     moreBurger();
 }
 
-
 ///Funciones de ingredientes, son todas similares, refieren al array de ingredientes correspondiente segun elección del usuario.
-function agregarCarne(){    
-    let opcion = parseInt(prompt("Tipo de Carne = 1. Vaca - 2. Cerdo - 3. Veggie"));       
+function agregarPan(){
+    
+    let opcion = parseInt(prompt(`Tipo de Pan:\n
+            1) ${ingredientesPanes[0].nombre} - $ ${ingredientesPanes[0].precio}\n 
+            2) ${ingredientesPanes[1].nombre} - $ ${ingredientesPanes[1].precio}\n                        
+            `));          
     while (opcion !== 1 && opcion !== 2 && opcion !== 3){
         alert("Opcion no valida. Intentemos nuevamente.")
-        opcion = parseInt(prompt("Tipo de Carne = 1. Vaca - 2. Cerdo - 3. Veggie"));
+        opcion = parseInt(prompt(`Tipo de Pan:\n
+            1) ${ingredientesPanes[0].nombre} - $ ${ingredientesPanes[0].precio}\n 
+            2) ${ingredientesPanes[1].nombre} - $ ${ingredientesPanes[1].precio}\n                        
+            `));
     }
     switch(opcion){
         case 1:
-            ingredienteCarne = carnes[0];;
+            ingredientePan = ingredientesPanes[0].nombre;
+            precioFinal=precioFinal+ingredientesPanes[0].precio;
             break;
         case 2:
-            ingredienteCarne = carnes[1];
-            break;
-        case 3:
-            ingredienteCarne = carnes[2];
-            break; 
-        default:
-            alert("Opcion no valida. Intentemos nuevamente")
-            opcion = parseInt(prompt("Tipo de Carne = 1. Vaca - 2. Cerdo - 3. Veggie"));
-    }    
-    return ingredienteCarne;
-}
-
-function agregarPan(){    
-    let opcion = parseInt(prompt("Tipo de Pan = 1. Traducional - 2. Celiaco"));       
-    while (opcion !== 1 && opcion !== 2){
-        alert("Opcion no valida. Intentemos nuevamente.")
-        opcion = parseInt(prompt("Tipo de Pan = 1. Traducional - 2. Celiaco"));
-    }
-    switch(opcion){
-        case 1:
-            ingredientePan = pan[0];;
-            break;
-        case 2:
-            ingredientePan = pan[1];
+            ingredientePan = ingredientesPanes[1].nombre;
+            precioFinal= precioFinal+ingredientesPanes[1].precio;
             break;        
         default:
             alert("Opcion no valida. Intentemos nuevamente")
-            opcion = parseInt(prompt("Tipo de Pan = 1. Traducional - 2. Celiaco"));
+            opcion = parseInt(prompt(`Tipo de Pan:\n
+                1) ${ingredientesPanes[0].nombre} - $ ${ingredientesPanes[0].precio}\n 
+                2) ${ingredientesPanes[1].nombre} - $ ${ingredientesPanes[1].precio}\n                        
+                `));
+    }    
+    return ingredientePan;
+}
+
+function agregarCarne(){
+    
+    let opcion = parseInt(prompt(`Tipo de Medallón:\n
+            1) ${ingredientesCarnes[0].nombre} - $ ${ingredientesCarnes[0].precio}\n 
+            2) ${ingredientesCarnes[1].nombre} - $ ${ingredientesCarnes[1].precio}\n
+            3) ${ingredientesCarnes[2].nombre} - $ ${ingredientesCarnes[2].precio}\n            
+            `));          
+    while (opcion !== 1 && opcion !== 2 && opcion !== 3){
+        alert("Opcion no valida. Intentemos nuevamente.")
+        opcion = parseInt(prompt(`Tipo de Medallón:\n
+            1) ${ingredientesCarnes[0].nombre} - $ ${ingredientesCarnes[0].precio}\n 
+            2) ${ingredientesCarnes[1].nombre} - $ ${ingredientesCarnes[1].precio}\n
+            3) ${ingredientesCarnes[2].nombre} - $ ${ingredientesCarnes[2].precio}\n            
+            `));
+    }
+    switch(opcion){
+        case 1:
+            ingredienteCarne = ingredientesCarnes[0].nombre;
+            precioFinal+= ingredientesCarnes[0].precio;
+            break;
+        case 2:
+            ingredienteCarne = ingredientesCarnes[1].nombre;
+            precioFinal+= ingredientesCarnes[1].precio;
+            break;
+        case 3:
+            ingredienteCarne = ingredientesCarnes[2].nombre;
+            precioFinal+= ingredientesCarnes[2].precio;
+            break; 
+        default:
+            alert("Opcion no valida. Intentemos nuevamente")
+            opcion = parseInt(prompt(`Tipo de Medallón:\n
+                1) ${ingredientesCarnes[0].nombre} - $ ${ingredientesCarnes[0].precio}\n 
+                2) ${ingredientesCarnes[1].nombre} - $ ${ingredientesCarnes[1].precio}\n
+                3) ${ingredientesCarnes[2].nombre} - $ ${ingredientesCarnes[2].precio}\n            
+                `));
     }    
     return ingredienteCarne;
 }
 
-function agregarVerduras(){
-    let opcion = parseInt(prompt("Verduras = 1. Tomate - 2. Lechuga - 3. Pepino - 4. Cebolla"))
-    while (opcion !== 1 && opcion !== 2 && opcion !== 3 && opcion !== 4){
-        alert("Opcion no valida. Intentemos nuevamente")
-        opcion = parseInt(prompt("Primer Ingrediente = 1. Tomate - 2. Lechuga - 3. Pepino - 4. Cebolla"));
+function agregarVerdura(){
+    
+    let opcion = parseInt(prompt(`Verduras:\n
+            1) ${ingredientesVerdes[0].nombre} - $ ${ingredientesVerdes[0].precio}\n 
+            2) ${ingredientesVerdes[1].nombre} - $ ${ingredientesVerdes[1].precio}\n 
+            3) ${ingredientesVerdes[2].nombre} - $ ${ingredientesVerdes[2].precio}\n
+            4) ${ingredientesVerdes[3].nombre} - $ ${ingredientesVerdes[3].precio}\n            
+            `));          
+    while (opcion !== 1 && opcion !== 2 && opcion !== 3){
+        alert("Opcion no valida. Intentemos nuevamente.")
+        opcion = parseInt(prompt(`Verduras:\n
+            1) ${ingredientesVerdes[0].nombre} - $ ${ingredientesVerdes[0].precio}\n 
+            2) ${ingredientesVerdes[1].nombre} - $ ${ingredientesVerdes[1].precio}\n 
+            3) ${ingredientesVerdes[2].nombre} - $ ${ingredientesVerdes[2].precio}\n
+            4) ${ingredientesVerdes[3].nombre} - $ ${ingredientesVerdes[3].precio}\n             
+            `));
     }
     switch(opcion){
         case 1:
-            ingredienteVerde = verdes[0];
+            ingredienteVerde = ingredientesVerdes[0].nombre;
+            precioFinal+= ingredientesVerdes[0].precio;
             break;
         case 2:
-            ingredienteVerde = verdes[1];
+            ingredienteVerde = ingredientesVerdes[1].nombre;
+            precioFinal+= ingredientesVerdes[1].precio;
             break;
         case 3:
-            ingredienteVerde = verdes[2];
-            break;
+            ingredienteVerde = ingredientesVerdes[2].nombre;
+            precioFinal+= ingredientesVerdes[2].precio;
+            break; 
         case 4:
-            ingredienteVerde = verdes[3];
-            break;
+            ingredienteVerde = ingredientesVerdes[3].nombre;
+            precioFinal+= ingredientesVerdes[3].precio;
+            break; 
         default:
             alert("Opcion no valida. Intentemos nuevamente")
-            opcion = parseInt(prompt("Verduras = 1. Tomate - 2. Lechuga - 3. Pepino - 4. Cebolla"));                     
+            opcion = parseInt(prompt(`Verduras:\n
+                1) ${ingredientesVerdes[0].nombre} - $ ${ingredientesVerdes[0].precio}\n 
+                2) ${ingredientesVerdes[1].nombre} - $ ${ingredientesVerdes[1].precio}\n 
+                3) ${ingredientesVerdes[2].nombre} - $ ${ingredientesVerdes[2].precio}\n
+                4) ${ingredientesVerdes[3].nombre} - $ ${ingredientesVerdes[3].precio}\n             
+                `));
     }    
     return ingredienteVerde;
 }
 
 function agregarQueso(){
-    let opcion = parseInt(prompt("Quesos = 1. Cheddar - 2. Cabra - 3. Provolone - 4. Azul"))
-    while (opcion !== 1 && opcion !== 2 && opcion !== 3 && opcion !== 4){
-        alert("Opcion no valida. Intentemos nuevamente")
-        opcion = parseInt(prompt("Quesos = 1. Cheddar - 2. Cabra - 3. Provolone - 4. Azul"));
+    
+    let opcion = parseInt(prompt(`Queso:\n
+            1) ${ingredientesQuesos[0].nombre} - $ ${ingredientesQuesos[0].precio}\n 
+            2) ${ingredientesQuesos[1].nombre} - $ ${ingredientesQuesos[1].precio}\n 
+            3) ${ingredientesQuesos[2].nombre} - $ ${ingredientesQuesos[2].precio}\n
+            4) ${ingredientesQuesos[3].nombre} - $ ${ingredientesQuesos[3].precio}\n           
+            `));          
+    while (opcion !== 1 && opcion !== 2 && opcion !== 3){
+        alert("Opcion no valida. Intentemos nuevamente.")
+        opcion = parseInt(prompt(`Queso:\n
+            1) ${ingredientesQuesos[0].nombre} - $ ${ingredientesQuesos[0].precio}\n 
+            2) ${ingredientesQuesos[1].nombre} - $ ${ingredientesQuesos[1].precio}\n 
+            3) ${ingredientesQuesos[2].nombre} - $ ${ingredientesQuesos[2].precio}\n
+            4) ${ingredientesQuesos[3].nombre} - $ ${ingredientesQuesos[3].precio}\n           
+            `));
     }
     switch(opcion){
         case 1:
-            ingredienteQueso = quesos[0];
+            ingredienteQueso = ingredientesQuesos[0].nombre;
+            precioFinal+= ingredientesQuesos[0].precio;
             break;
         case 2:
-            ingredienteQueso = quesos[1];
+            ingredienteQueso = ingredientesQuesos[1].nombre;
+            precioFinal+= ingredientesQuesos[1].precio;
             break;
         case 3:
-            ingredienteQueso = quesos[2];
-            break;
+            ingredienteQueso = ingredientesQuesos[2].nombre;
+            precioFinal+= ingredientesQuesos[2].precio;
+            break; 
         case 4:
-            ingredienteQueso = quesos[3];
-            break;  
+            ingredienteQueso = ingredientesQuesos[3].nombre;
+            precioFinal+= ingredientesQuesos[3].precio;
+            break; 
         default:
             alert("Opcion no valida. Intentemos nuevamente")
-            opcion = parseInt(prompt("Quesos = 1. Cheddar - 2. Cabra - 3. Provolone - 4. Azul"));
+            opcion = parseInt(prompt(`Queso:\n
+                1) ${ingredientesQuesos[0].nombre} - $ ${ingredientesQuesos[0].precio}\n 
+                2) ${ingredientesQuesos[1].nombre} - $ ${ingredientesQuesos[1].precio}\n 
+                3) ${ingredientesQuesos[2].nombre} - $ ${ingredientesQuesos[2].precio}\n
+                4) ${ingredientesQuesos[3].nombre} - $ ${ingredientesQuesos[3].precio}\n           
+                `));
     }    
     return ingredienteQueso;
 }
 
-function agregarExtra(){    
-    let opcion = parseInt(prompt("Agregar Extra = 1. Bacon - 2. Jamon - 3. Huevo - 4. Salsa Heroica"));       
-    while (opcion !== 1 && opcion !== 2 && opcion !== 3 && opcion !== 4){
+function agregarExtra(){
+    
+    let opcion = parseInt(prompt(`Extra:\n
+            1) ${ingredientesExtras[0].nombre} - $ ${ingredientesExtras[0].precio}\n 
+            2) ${ingredientesExtras[1].nombre} - $ ${ingredientesExtras[1].precio}\n 
+            3) ${ingredientesExtras[2].nombre} - $ ${ingredientesExtras[2].precio}\n
+            4) ${ingredientesExtras[3].nombre} - $ ${ingredientesExtras[3].precio}\n           
+            `));          
+    while (opcion !== 1 && opcion !== 2 && opcion !== 3){
         alert("Opcion no valida. Intentemos nuevamente.")
-        opcion = parseInt(prompt("Agregar Extra = 1. Bacon - 2. Jamon - 3. Huevo - 4. Salsa Heroica"));
+        opcion = parseInt(prompt(`Extra:\n
+            1) ${ingredientesExtras[0].nombre} - $ ${ingredientesExtras[0].precio}\n 
+            2) ${ingredientesExtras[1].nombre} - $ ${ingredientesExtras[1].precio}\n 
+            3) ${ingredientesExtras[2].nombre} - $ ${ingredientesExtras[2].precio}\n
+            4) ${ingredientesExtras[3].nombre} - $ ${ingredientesExtras[3].precio}\n           
+            `));
     }
     switch(opcion){
         case 1:
-            ingredienteExtra = extras[0];
+            ingredienteExtra = ingredientesExtras[0].nombre;
+            precioFinal+= ingredientesExtras[0].precio;
             break;
         case 2:
-            ingredienteExtra = extras[1];
+            ingredienteExtra = ingredientesExtras[1].nombre;
+            precioFinal+= ingredientesExtras[1].precio;
             break;
         case 3:
-            ingredienteExtra = extras[2];
+            ingredientesExtra = ingredientesExtras[2].nombre;
+            precioFinal+= ingredientesExtras[2].precio;
             break; 
         case 4:
-            ingredienteExtra = extras[3];
-            break;
+            ingredientesExtra = ingredientesExtras[3].nombre;
+            precioFinal+= ingredientesExtras[3].precio;
+            break; 
         default:
             alert("Opcion no valida. Intentemos nuevamente")
-            opcion = parseInt(prompt("Agregar Extra = 1. Bacon - 2. Jamon - 3. Huevo - 4. Salsa Heroica"));
+            opcion = parseInt(prompt(`Extra:\n
+                1) ${ingredientesExtras[0].nombre} - $ ${ingredientesExtras[0].precio}\n 
+                2) ${ingredientesExtras[1].nombre} - $ ${ingredientesExtras[1].precio}\n 
+                3) ${ingredientesExtras[2].nombre} - $ ${ingredientesExtras[2].precio}\n
+                4) ${ingredientesExtras[3].nombre} - $ ${ingredientesExtras[3].precio}\n           
+                `));
     }    
-    return ingredienteCarne;
+    return ingredienteExtra;
 }
 
 function setSize(){
@@ -237,16 +355,16 @@ function setSize(){
 return tamanio;
 }
 
-//Las funcion precio refiere a las constantes de precio acorde a la elección previa del usuario.
-function setPrecio(precioBase,tamanio){    
+//Las funcion recibe el precio sumado ingredientes elegidos y de forma posterior multiplica el valor en funcion del tamaño del producto definido por constantes.
+function setPrecio(tamanio){    
     if (tamanio == "Extra Large") {
-        precioFinal=precioBase*extraLarge;
+        precioFinal*=extraLarge;
     }
     else if (tamanio == "Large"){
-        precioFinal=precioBase*large;
+        precioFinal*=large;
     }
     else{
-        precioFinal=precioBase;
+        precioFinal;
     }
     return precioFinal;
 }
@@ -254,4 +372,19 @@ function setPrecio(precioBase,tamanio){
 ///EJECUCCION///
 alert("Bienvenido a HeroBurger: Tu Hamburguesa Heroica");
 menuBurger();
+///El usuario puede visualizar por consola las hamburguesas creadas en la ejecución actual.
 console.log(hamburguesas);
+///Agregamos al html el detalle de la orden.
+for (const burger of hamburguesas){ 
+    let index = hamburguesas.indexOf(burger);   
+    document.write(`<h2 style="color: white">Hero Burguer: ${index+1}</h2>`);        
+    document.write(`<h2 style="color: white">Tipo de Pan: ${burger.ingredientePan}</h2>`);
+    document.write(`<h2 style="color: white">Tipo de Medallón: ${burger.ingredienteCarne}</h2>`);
+    document.write(`<h2 style="color: white">Verdes: ${burger.ingredienteVerde}</h2>`);
+    document.write(`<h2 style="color: white">Queso: ${burger.ingredienteQueso}</h2>`);
+    document.write(`<h2 style="color: white">Extras: ${burger.ingredienteExtra}</h2>`);
+    document.write(`<h2 style="color: white">Tamaño: ${burger.tamanio}</h2>`);
+    document.write(`<h2 style="color: white">Precio Final: ${burger.precioFinal}</h2>`);
+    document.write(`<h2 style="color: white">Número de Orden: ${burger.numOrder}</h2>`);        
+}
+
